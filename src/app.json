@@ -10,8 +10,7 @@
     "pages/mine/order-history/order-detail/main",
     "pages/mine/my-address/main",
     "pages/mine/my-address/edit-address/main",
-    "pages/mine/integral/main",
-    "pages/login/main"
+    "pages/mine/integral/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

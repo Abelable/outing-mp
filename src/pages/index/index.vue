@@ -32,8 +32,8 @@
             <p class="sales-num">销量：{{item.salesNum}}</p>
             <p class="food-price">￥{{item.foodPrice}}</p>
           </div>
-          <div class="cart-control-wrapper" @click.stop="">
-            <cart-control :size="0.8"/>
+          <div class="cart-control-wrapper">
+            <cart-control :size="0.8" @login="login" />
           </div>
         </view>
       </scroll-view>
@@ -52,20 +52,26 @@
               <p class="sales-num">销量：{{_item.salesNum}}</p>
               <p class="food-price">￥{{_item.foodPrice}}</p>
             </div>
-            <div class="cart-control-wrapper" @click.stop="">
-              <cart-control/>
+            <div class="cart-control-wrapper">
+              <cart-control @login="login"/>
             </div>
           </ivew>
         </scroll-view>
       </div>
     </div>
+    <login-modal v-if="loginModalVisible" @hide="hideLoginModal"/>
   </div>
 </template>
 
 <script>
 import CartControl from '@/components/cart-control'
+import LoginModal from '@/components/login-modal'
 
 export default {
+  components: {
+    CartControl,
+    LoginModal
+  },
   data() {
     return {
       selectedIndex: 0,
@@ -276,11 +282,16 @@ export default {
           ]
         }
       ],
-      currentIndex: 0
+      currentIndex: 0,
+      loginModalVisible: false
     }
   },
+  created() {},
   computed() {},
   methods: {
+    login() {
+      if (!wx.getStorageSync('token')) this.loginModalVisible = true
+    },
     handleChange(e) {
       this.currentIndex = e.target.current
     },
@@ -289,11 +300,10 @@ export default {
     },
     linkToSeller() {
       wx.navigateTo({ url: './seller-detail/main' });
-    }
-  },
-  created() {},
-  components: {
-    CartControl
+    },
+    hideLoginModal() {
+      this.loginModalVisible = false
+    },
   }
 }
 </script>

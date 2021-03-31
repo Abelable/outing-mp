@@ -13,7 +13,7 @@ class Base {
       }
     })
     wx.hideLoading()
-    return this.processRes(res)
+    return this._processRes(res)
   }
 
   async post({ url, data, loadingTitle = '加载中...' }) {
@@ -26,7 +26,17 @@ class Base {
       }
     })
     wx.hideLoading()
-    return this.processRes(res)
+    return this._processRes(res)
+  }
+
+  _processRes(res) {
+    if ([200,201,204].includes(res.statusCode)) {
+      const { error_code: errorCode, msg, data } = res.data
+      if (!errorCode) return data
+      else wx.showToast({ title: msg, icon: 'none' })
+    } else {
+      wx.showToast({ title: res.errMsg, icon: 'none' })
+    }
   }
 
   chooseImage(count) {
@@ -51,16 +61,6 @@ class Base {
 
   requestSubscribeMessage(tmplId) {
     return api.requestSubscribeMessage({ tmplIds: [tmplId]})
-  }
-
-  processRes(res) {
-    if ([200,201,204].includes(res.statusCode)) {
-      const { error_code: errorCode, msg, data } = res.data
-      if (!errorCode) return data
-      else wx.showToast({ title: msg, icon: 'none' })
-    } else {
-      wx.showToast({ title: res.errMsg, icon: 'none' })
-    }
   }
 }
 

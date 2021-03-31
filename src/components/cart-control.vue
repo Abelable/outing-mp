@@ -1,8 +1,8 @@
 <template>
   <div class="cart-control" :style="{transform: cartScale}">
-    <img class="sub-icon" v-if="cartNum" @click="sub" src="../../static/img/sub-icon.png" alt="">
+    <img class="sub-icon" v-if="cartNum" @click.stop="sub" src="../../static/img/sub-icon.png" alt="">
     <p v-if="cartNum" class="cart-num">{{cartNum}}</p>
-    <img class="add-icon" @click="cartNum ++" src="../../static/img/add-icon.png" alt="">
+    <img class="add-icon" @click.stop="add" src="../../static/img/add-icon.png" alt="">
   </div>
 </template>
 
@@ -18,10 +18,12 @@ export default {
   },
   methods: {
     sub() {
-      if (this.cartNum === 0) {
-        return
-      }
-      this.cartNum --
+      if (!wx.getStorageSync('token')) this.$emit('login')
+      else if (this.cartNum > 0) this.cartNum --
+    },
+    add() {
+      if (!wx.getStorageSync('token')) this.$emit('login')
+      else this.cartNum ++
     }
   },
   computed: {
